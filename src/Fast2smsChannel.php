@@ -33,13 +33,13 @@ class Fast2smsChannel
         if(is_string($to)){
             array_push($toArray,$to);
         }
-        $content = $notification->toFast2sms($notifiable);
+        $content = $notification->toFast2sms($notifiable)->getPayload();
         if(empty($toArray)){
-            array_push($toArray,$content['payload']['to']);
+            array_push($toArray,$content['to']);
         }
 
-        return $this->Fast2smsClient->send($content['payload']['messageId'],$content['payload']['variable_values'],$toArray);
+        return $this->Fast2smsClient->send($content['messageId'],$content['variable_values'],$toArray);
 
-        
+
     }
 }

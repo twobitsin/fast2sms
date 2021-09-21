@@ -20,7 +20,17 @@ class Fast2smsMessage
 
         return $this;
     }
-
+    /**
+     * Get the payload value for a given key.
+     *
+     * @param string $key
+     *
+     * @return mixed|null
+     */
+    public function getPayload()
+    {
+        return $this->payload ?? null;
+    }
 
     /**
      * Set recipient phone number.
@@ -45,5 +55,4 @@ class Fast2smsMessage
 
         return $this;
     }
-
 }

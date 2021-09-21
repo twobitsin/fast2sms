@@ -36,7 +36,7 @@ class Fast2smsClient
         $this->endpoint = env('FAST2SMS_ENDPOINT');
         $this->route = env('FAST2SMS_ROUTE');
         $this->flash = env('FAST2SMS_FLASH');
-        $this->sendor_id = env('FAST2SMS_SENDOR_ID');
+        $this->sender_id = env('FAST2SMS_SENDOR_ID');
         $this->auth_token = env('FAST2SMS_AUTH_TOKEN');
     }
 
@@ -60,7 +60,7 @@ class Fast2smsClient
         if ($this->flash == "") {
             throw CouldNotSendNotification::envNotset();
         }
-        if ($this->sendor_id == "") {
+        if ($this->sender_id == "") {
             throw CouldNotSendNotification::envNotset();
         }
         if ($this->auth_token == "") {
@@ -73,9 +73,11 @@ class Fast2smsClient
             $params = [
                 'message' => $message,
                 'variables_values' => $variables_values,
-                'numbers' => $numbers
+                'numbers' => $numbers,
+                'sender_id' => $this->sender_id,
+                'flash' => $this->flash,
+                'route' => $this->route
             ];
-            $params = array_merge($params, $this->params);
             $res =  $this->client->request(
                 'POST',
                 $this->endpoint,
@@ -84,7 +86,7 @@ class Fast2smsClient
                         "Content-Type" => "application/json",
                         "authorization" => $this->auth_token
                     ],
-                    'body' => $params
+                    'body' => json_encode($params)
                 ]
             );
             $response = json_decode((string) $res->getBody(), true);
